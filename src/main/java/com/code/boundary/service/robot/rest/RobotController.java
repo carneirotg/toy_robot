@@ -6,17 +6,34 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.code.boundary.service.robot.entities.Movement;
+import com.code.boundary.service.robot.entities.Robot;
+
 @Controller
-@RequestMapping("/robot/")
+@RequestMapping("/robot")
 public class RobotController {
 
 	@ResponseStatus(value = HttpStatus.CREATED)
-	 @RequestMapping(produces = "application/json", consumes = MediaType.TEXT_PLAIN_VALUE, method = RequestMethod.POST)
-	public @ResponseBody String createAndMoveRobot(@RequestBody String body){
+	@RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+	public void create(@RequestBody Robot robot){
+		System.out.println(robot.toString());
 		
-		return "OK";
+	}
+	
+	@ResponseStatus(value=HttpStatus.OK)
+	@RequestMapping(value = {"/position"}, consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.PUT)
+	public void update(@RequestBody Movement action){
+		
+		
+		
+	}
+	
+	@ResponseStatus(value=HttpStatus.OK)
+	@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
+	public String get(){
+		
+		return "0,0,NORTH";
 	}
 }
