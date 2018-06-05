@@ -13,9 +13,16 @@ public class RobotServiceImpl implements RobotService{
 	private RobotRepository robotRepository;
 	
 	@Override
-	public void doAction(Robot robot, Action action) {
+	public void doAction(Action action) {
+		
+		//recupera o ultimo robo
+		//ve qual o tipo da action
+			// se for so LEFT ou RIGHT, atualiza o orientation
+			// se for MOVE
+				//case para mover o robo
 		
 		
+		//atualiza o lastStep com MOVEMENT
 		
 	}
 

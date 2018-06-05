@@ -8,7 +8,7 @@ public interface RobotService {
 	
 	public void createRobot(Robot robot);
 	
-	public void doAction(Robot robot, Action action);
+	public void doAction(Action action);
 	
 	public Output getOutput();
 
