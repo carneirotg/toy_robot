@@ -1,7 +1,10 @@
-package com.code.boundary.service.robot.entities;
+package com.code.boundary.robot.entities;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "robot")
 public class Robot {
 
 	@Id
@@ -15,18 +18,9 @@ public class Robot {
 	
 	private String lastStep;
 	
-	public Robot(int x, int y, String orientation){
-		this.x = x;
-		this.y = y;
-		this.orientation = orientation;
-	}
-
-	public String getLastStep() {
-		return lastStep;
-	}
-
-	public void setLastStep(String lastStep) {
-		this.lastStep = lastStep;
+	
+	public String getId() {
+		return id;
 	}
 
 	public int getX() {
@@ -52,13 +46,21 @@ public class Robot {
 	public void setOrientation(String orientation) {
 		this.orientation = orientation;
 	}
-	
+
+	public String getLastStep() {
+		return lastStep;
+	}
+
+	public void setLastStep(String lastStep) {
+		this.lastStep = lastStep;
+	}
+
 	public String toString(){
 		return String.format("id: [%s], X: [%d], Y: [%d], Orientation: [%s], lastStep: [%s]", id.toString(),x,y,orientation, lastStep);
 	}
-
-	public String getId() {
-		return id.toString();
+	
+	public String toOutput(){
+		return String.format("Output: %d, %d, %s", x,y,orientation);
 	}
 
 }

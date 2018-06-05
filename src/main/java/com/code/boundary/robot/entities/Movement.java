@@ -1,4 +1,4 @@
-package com.code.boundary.service.robot.entities;
+package com.code.boundary.robot.entities;
 
 public class Movement {
 
