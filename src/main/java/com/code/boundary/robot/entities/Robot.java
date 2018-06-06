@@ -1,5 +1,7 @@
 package com.code.boundary.robot.entities;
 
+import javax.validation.constraints.Max;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,11 +12,13 @@ public class Robot {
 	@Id
 	private String id;
 	
+	@Max(5)
 	private int x;
 	
+	@Max(5)
 	private int y;
 	
-	private String orientation;
+	private Orientation orientation;
 	
 	private String lastStep;
 	
@@ -39,12 +43,12 @@ public class Robot {
 		this.y = y;
 	}
 
-	public String getOrientation() {
+	public Orientation getOrientation() {
 		return orientation;
 	}
 
-	public void setOrientation(String orientation) {
-		this.orientation = orientation;
+	public void setOrientation(Orientation east) {
+		this.orientation = east;
 	}
 
 	public String getLastStep() {

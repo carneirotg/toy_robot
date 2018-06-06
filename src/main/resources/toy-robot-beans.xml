@@ -7,9 +7,6 @@
 
 	<bean id="robotService" class="com.code.boundary.robot.service.RobotServiceImpl" />
 	
-	<bean id="robotValidator" class="com.code.boundary.robot.validator.RobotValidator" />
-	<bean id="movementValidator" class="com.code.boundary.robot.validator.MovementValidator" />
-	
 	<bean id="robotRepository" class="com.code.boundary.robot.repository.RobotRepository" />
 		
 </beans>
