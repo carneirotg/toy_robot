@@ -1,0 +1,16 @@
+version: '2'
+services:
+  mongo:
+    image: mongo
+    restart: always
+  
+  robot:  
+    container_name: "toy-robot"
+    restart: always
+    image: code/toy-robot:latest
+    volumes:
+        - .:/var/www:rw
+        - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    entrypoint: "java -Djava.security.egd=file:/dev/./urandom -jar /app.jar"
+    ports:
+        - 8080:8080

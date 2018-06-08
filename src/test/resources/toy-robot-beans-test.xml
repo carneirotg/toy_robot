@@ -5,9 +5,11 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<bean id="robotService" class="org.mockito.Mockito" factory-method="mock">
+	<!-- <bean id="robotService" class="org.mockito.Mockito" factory-method="mock">
     	<constructor-arg value="com.code.boundary.robot.service.RobotService" />
-  	</bean>
+  	</bean> -->
+  	
+  	<bean id="robotService" class="com.code.boundary.robot.service.RobotServiceImpl" />
   	
   	<bean id="robotRepository" class="org.mockito.Mockito" factory-method="mock">
     	<constructor-arg value="com.code.boundary.robot.repository.RobotRepository" />

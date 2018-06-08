@@ -20,7 +20,7 @@ public class Robot {
 	
 	private Orientation orientation;
 	
-	private String lastStep;
+	private Action lastStep;
 	
 	
 	public String getId() {
@@ -51,16 +51,16 @@ public class Robot {
 		this.orientation = east;
 	}
 
-	public String getLastStep() {
+	public Action getLastStep() {
 		return lastStep;
 	}
 
-	public void setLastStep(String lastStep) {
+	public void setLastStep(Action lastStep) {
 		this.lastStep = lastStep;
 	}
 
 	public String toString(){
-		return String.format("id: [%s], X: [%d], Y: [%d], Orientation: [%s], lastStep: [%s]", id.toString(),x,y,orientation, lastStep);
+		return String.format("X: [%d], Y: [%d], Orientation: [%s], lastStep: [%s]", x,y,orientation, lastStep);
 	}
 	
 	public String toOutput(){

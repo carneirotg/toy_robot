@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 
+import com.code.boundary.robot.entities.Action;
 import com.code.boundary.robot.entities.Robot;
 
 public class RobotRepositoryCustomImpl implements RobotRepositoryCustom{
@@ -27,12 +28,9 @@ public class RobotRepositoryCustomImpl implements RobotRepositoryCustom{
 		if (robots.isEmpty()){
 			return null;
 		}
-		System.out.println(robots);
+		
 		Robot robot = robots.get(0);
-		
-		robot.setLastStep("OUTPUT");
-		mongoTemplate.save(robot);
-		
+			
 		return robot;
 	}
 

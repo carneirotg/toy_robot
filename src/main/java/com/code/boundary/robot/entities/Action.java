@@ -3,7 +3,8 @@ package com.code.boundary.robot.entities;
 public enum Action {
 	MOVE("MOVE"),
 	LEFT("LEFT"),
-	RIGHT("RIGHT");
+	RIGHT("RIGHT"),
+	OUTPUT("OUTPUT");
 	
 	private String content;
 	
