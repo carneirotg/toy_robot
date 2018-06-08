@@ -34,8 +34,15 @@ public class RobotController {
 	
 	@ResponseStatus(value = HttpStatus.CREATED)
 	@RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
-	public void create(@RequestBody Robot robot){
+	public void create(@RequestBody Robot robot) throws InvalidValueException{
 		logger.debug("Robot Created -> "+ robot);
+		
+		if (robot.getX() < 0 || robot.getX() > 5){
+			throw new InvalidValueException("The X should be >= 0 and <= 5");
+		} else if (robot.getY() < 0 || robot.getY() > 5){
+			throw new InvalidValueException("The Y should be >= 0 and <= 5");
+		}
+		
 		robotService.createRobot(robot);
 		
 	}
@@ -57,10 +64,17 @@ public class RobotController {
 		logger.debug(robot);
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@RequestMapping(value = {"/report"}, produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
-	public Output getReport(){
-		
-		Output output = robotService.getOutput();
+	public Output getReport() throws MissingRobotException{
+	
+		Output output;
+		try{
+			output = robotService.getOutput();
+		} catch(MissingRobotException ex){
+			ex.printStackTrace();
+			throw new MissingRobotException("ROBOT MISSING");
+		}
 		
 		logger.debug("Output -> "+ output);
 		return output;

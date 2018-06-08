@@ -27,7 +27,6 @@ import com.code.boundary.robot.entities.Orientation;
 import com.code.boundary.robot.entities.Output;
 import com.code.boundary.robot.entities.Robot;
 import com.code.boundary.robot.repository.RobotRepository;
-import com.code.boundary.robot.service.RobotService;
 import com.code.boundary.robot.util.TestUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -37,9 +36,6 @@ public class RobotControllerTest {
 	
 	 @Autowired
 	 private MockMvc mvc;
-	 
-	 @Autowired
-	 private RobotService robotService;
 	 
 	 @Autowired
 	 private RobotRepository robotRepository;
@@ -54,22 +50,42 @@ public class RobotControllerTest {
 	 }
 	 
 	 @Test
+	 public void testCreateWithInvalidX() throws IOException, Exception{
+		 Robot robot = new Robot();
+		 robot.setX(6);
+		 robot.setY(0);
+		 robot.setOrientation(Orientation.EAST);
+		 
+		 this.mvc.perform(post("/robot/")
+				 .contentType(MediaType.APPLICATION_JSON)
+				 .accept(MediaType.APPLICATION_JSON)
+				 .content(TestUtil.convertObjectToJsonBytes(robot)))
+		 		 .andExpect(MockMvcResultMatchers.status().isBadRequest());
+	 }
+	 
+	 @Test
+	 public void testCreateWithInvalidY() throws IOException, Exception{
+		 Robot robot = new Robot();
+		 robot.setX(2);
+		 robot.setY(6);
+		 robot.setOrientation(Orientation.EAST);
+		 
+		 this.mvc.perform(post("/robot/")
+				 .contentType(MediaType.APPLICATION_JSON)
+				 .accept(MediaType.APPLICATION_JSON)
+				 .content(TestUtil.convertObjectToJsonBytes(robot)))
+		 		 .andExpect(MockMvcResultMatchers.status().isBadRequest());
+	 }
+	 
+	 @Test
 	 public void testReportWithoutAnyPreviousRobot() throws Exception{
-		 
-		 
-		 Output output = new Output();
-		 output.setMessage("ROBOT MISSING");
-		 
-		 JSONObject expectedResponse = new JSONObject();
-		 expectedResponse.put("message", "ROBOT MISSING");
 		 
 		 when(robotRepository.findLastInserted()).thenReturn(null);
 		 assertEquals(null, robotRepository.findLastInserted());
 		 
          this.mvc.perform(get("/robot/report")
                  .accept(MediaType.APPLICATION_JSON))
-                 .andExpect(MockMvcResultMatchers.status().isOk())
-                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(expectedResponse.get("message")));
+                 .andExpect(MockMvcResultMatchers.status().isNotFound());
 		 
 	 }
 	 

@@ -7,6 +7,7 @@ import com.code.boundary.robot.entities.Orientation;
 import com.code.boundary.robot.entities.Output;
 import com.code.boundary.robot.entities.Robot;
 import com.code.boundary.robot.repository.RobotRepository;
+import com.code.boundary.robot.rest.MissingRobotException;
 
 public class RobotServiceImpl implements RobotService{
 
@@ -69,7 +70,7 @@ public class RobotServiceImpl implements RobotService{
 	}
 
 	@Override
-	public Output getOutput() {
+	public Output getOutput() throws MissingRobotException {
 		
 		Robot robot = robotRepository.findLastInserted();
 		Output output = new Output();
@@ -78,7 +79,7 @@ public class RobotServiceImpl implements RobotService{
 			robot.setLastStep(Action.OUTPUT);
 			robotRepository.save(robot);
 		} else {
-			output.setMessage("ROBOT MISSING");
+			throw new MissingRobotException("ROBOT MISSING");
 		}
 		
 		return output;
