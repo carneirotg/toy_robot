@@ -8,7 +8,7 @@
   **Required:**
    `x=[integer][0-5]`
    `y=[integer][0-5]`
-   `orientation=[string][NORTH | EAST | SOUTH, | WEST]`
+   `orientation=[string][NORTH | EAST | SOUTH | WEST]`
 * **Success Response:**
   * **Code:** 201 <br />
 * **Error Response:**
