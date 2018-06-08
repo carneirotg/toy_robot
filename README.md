@@ -16,7 +16,7 @@ A RESTful application that creates and move a single robot at a 5x5 table.
   The application will be available at `http://localhost:8080`
   
 # Configuration
-  * If one don't want to run the docker-compose, then you should run the `mongod` service that will listen to de default port `27017` and then run `java -jar target/toy-robot-1.0.jar`
+  * If one does't want to run the docker-compose, then you should run the `mongod` service that will listen to de default port `27017` and then run `java -jar target/toy-robot-1.0.jar`
 
 # Testing
  * Inside src/test/resources, there is a file `Robot.postman_collection.json` that can be imported to Postman with some calls.
