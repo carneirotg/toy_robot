@@ -20,3 +20,6 @@ A RESTful application that creates and move a single robot at a 5x5 table.
 
 # Testing
  * Inside src/test/resources, there is a file `Robot.postman_collection.json` that can be imported to Postman with some calls.
+
+# [API](docs/API.md)
+ 
