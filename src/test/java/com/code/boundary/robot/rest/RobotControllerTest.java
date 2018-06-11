@@ -33,142 +33,145 @@ import com.code.boundary.robot.util.TestUtil;
 @WebMvcTest(RobotController.class)
 @ContextConfiguration(locations="classpath:toy-robot-beans-test.xml")
 public class RobotControllerTest {
-	
+
 	 @Autowired
 	 private MockMvc mvc;
-	 
+
 	 @Autowired
 	 private RobotRepository robotRepository;
-	    
+
 	 @Autowired
 	 @InjectMocks
 	 private RobotController robotController;
-	 
+
 	 @Before
 	 public void setUp(){
 		 robotRepository.deleteAll();
 	 }
-	 
+
 	 @Test
-	 public void testCreateWithInvalidX() throws IOException, Exception{
+	 public void post_CreateRobotWithInvalidX_ExceptionThrown() throws IOException, Exception{
 		 Robot robot = new Robot();
 		 robot.setX(6);
 		 robot.setY(0);
 		 robot.setOrientation(Orientation.EAST);
-		 
+
 		 this.mvc.perform(post("/robot/")
 				 .contentType(MediaType.APPLICATION_JSON)
 				 .accept(MediaType.APPLICATION_JSON)
 				 .content(TestUtil.convertObjectToJsonBytes(robot)))
 		 		 .andExpect(MockMvcResultMatchers.status().isBadRequest());
 	 }
-	 
+
 	 @Test
-	 public void testCreateWithInvalidY() throws IOException, Exception{
+	 public void post_CreateRobotWithInvalidY_ExceptionThrown() throws IOException, Exception{
 		 Robot robot = new Robot();
 		 robot.setX(2);
 		 robot.setY(6);
 		 robot.setOrientation(Orientation.EAST);
-		 
+
 		 this.mvc.perform(post("/robot/")
 				 .contentType(MediaType.APPLICATION_JSON)
 				 .accept(MediaType.APPLICATION_JSON)
 				 .content(TestUtil.convertObjectToJsonBytes(robot)))
 		 		 .andExpect(MockMvcResultMatchers.status().isBadRequest());
 	 }
-	 
+
 	 @Test
-	 public void testReportWithoutAnyPreviousRobot() throws Exception{
-		 
+	 public void get_reportWithoutAnyPreviousRobot_RobotMissing() throws Exception{
+
 		 when(robotRepository.findLastInserted()).thenReturn(null);
 		 assertEquals(null, robotRepository.findLastInserted());
-		 
+
          this.mvc.perform(get("/robot/report")
                  .accept(MediaType.APPLICATION_JSON))
                  .andExpect(MockMvcResultMatchers.status().isNotFound());
-		 
+
 	 }
-	 
+
 	 @Test
-	 public void testCreateRobotSuccess() throws Exception{
-		 
+	 public void post_createRobotWithSuccess() throws Exception{
+
 		 Robot robot = new Robot();
 		 robot.setX(0);
 		 robot.setY(0);
 		 robot.setOrientation(Orientation.EAST);
-		 
+
 		 this.mvc.perform(post("/robot/")
 				 .contentType(MediaType.APPLICATION_JSON)
 				 .accept(MediaType.APPLICATION_JSON)
 				 .content(TestUtil.convertObjectToJsonBytes(robot)))
 		 		 .andExpect(MockMvcResultMatchers.status().isCreated());
 	 }
-	 
+
 	 @Test
-	 public void testCreateRobotWithInvalidOrientation() throws Exception{
-		 
+	 public void post_createRobotWithInvalidOrientation_ExceptionThrown() throws Exception{
+
 		 String content = "{\"x\": 0,\"y\": 0,\"orientation\": \"UP\"}";
-		 
+
 		 this.mvc.perform(post("/robot/")
 				 .contentType(MediaType.APPLICATION_JSON)
 				 .accept(MediaType.APPLICATION_JSON)
 				 .content(content))
 		 		 .andExpect(MockMvcResultMatchers.status().isBadRequest());
 	 }
-	 
+
 	 @Test
-	 public void testMovementBeforeCreatingRobot() throws IOException, Exception{
-		 
+	 public void put_MovementBeforeCreatingRobot_RobotMissing() throws IOException, Exception{
+
 		 Movement m = new Movement();
 		 m.setAction(Action.MOVE);
 		 
+		 when(robotRepository.findLastInserted()).thenReturn(null);
+		 assertEquals(null, robotRepository.findLastInserted());
+
 		 this.mvc.perform(put("/robot/position")
 				 .contentType(MediaType.APPLICATION_JSON)
 				 .accept(MediaType.APPLICATION_JSON)
 				 .content(TestUtil.convertObjectToJsonBytes(m)))
 				 .andExpect(MockMvcResultMatchers.status().isNotFound());
 	 }
-	 
+
 	 @Test
-	 public void testMovementWithSuccess() throws Exception{
+	 public void put_movementWithSuccess() throws Exception{
 
 		 //create robot
 		 Robot robot = new Robot();
 		 robot.setX(0);
 		 robot.setY(0);
 		 robot.setOrientation(Orientation.EAST);
-		 
+
 		 Movement m = new Movement();
 		 m.setAction(Action.MOVE);
-		 
+
 		 when(robotRepository.findLastInserted()).thenReturn(robot);
 		 assertEquals(robotRepository.findLastInserted(), robot);
-		 
+
 		 this.mvc.perform(put("/robot/position")
 				 .contentType(MediaType.APPLICATION_JSON)
 				 .accept(MediaType.APPLICATION_JSON)
 				 .content(TestUtil.convertObjectToJsonBytes(m)))
 				 .andExpect(MockMvcResultMatchers.status().isNoContent());
-		 
+
 	 }
-	 
+
 	 @Test
-	 public void testOutputWithSuccess() throws Exception{
+	 public void get_reportWithSuccess() throws Exception{
 
 		 Robot robot = new Robot();
 		 robot.setX(1);
 		 robot.setY(0);
 		 robot.setOrientation(Orientation.SOUTH);
-		 
+
 		 when(robotRepository.findLastInserted()).thenReturn(robot);
 		 assertEquals(robotRepository.findLastInserted(), robot);
-		 
+
 		 Output output = new Output();
 		 output.setMessage("Output: 1, 0, SOUTH");
-		 
+
 		 JSONObject expectedResponse = new JSONObject();
 		 expectedResponse.put("message", "Output: 1, 0, SOUTH");
-		 
+
          this.mvc.perform(get("/robot/report")
                  .accept(MediaType.APPLICATION_JSON))
                  .andExpect(MockMvcResultMatchers.status().isOk())
