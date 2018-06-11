@@ -11,6 +11,7 @@ A RESTful application that creates and move a single robot at a 5x5 table.
   * docker-compose
 
 # Usage
+  * Build the project with `mvn clean install` that will run all the tests and also create a docker image for the application
   * One can choose wether to install mongodb in your system (https://docs.mongodb.com/manual/installation/) or run the docker-compose to generate the Docker for the SpringBoot Application and the MongoDB Server.
   * Run `docker-compose up -d`
   The application will be available at `http://localhost:8080`
