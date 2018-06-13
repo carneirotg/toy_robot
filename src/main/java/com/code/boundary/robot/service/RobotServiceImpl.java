@@ -1,6 +1,7 @@
 package com.code.boundary.robot.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.code.boundary.robot.entities.Action;
 import com.code.boundary.robot.entities.Orientation;
@@ -9,6 +10,7 @@ import com.code.boundary.robot.entities.Robot;
 import com.code.boundary.robot.repository.RobotRepository;
 import com.code.boundary.robot.rest.MissingRobotException;
 
+@Service
 public class RobotServiceImpl implements RobotService{
 
 	@Autowired

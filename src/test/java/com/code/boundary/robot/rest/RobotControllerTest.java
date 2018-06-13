@@ -14,13 +14,19 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.context.support.StaticApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
+import com.code.boundary.robot.base.RobotConfig;
 import com.code.boundary.robot.entities.Action;
 import com.code.boundary.robot.entities.Movement;
 import com.code.boundary.robot.entities.Orientation;
@@ -30,13 +36,14 @@ import com.code.boundary.robot.repository.RobotRepository;
 import com.code.boundary.robot.util.TestUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebMvcTest(RobotController.class)
-@ContextConfiguration(locations="classpath:toy-robot-beans-test.xml")
+//@WebMvcTest(RobotController.class)
+@AutoConfigureMockMvc
+//@ContextConfiguration(locations="classpath:toy-robot-beans-test.xml")
+@ContextConfiguration(loader=AnnotationConfigContextLoader.class, classes = {RobotConfig.class, RobotController.class})
 public class RobotControllerTest {
-
-	 @Autowired
-	 private MockMvc mvc;
-
+	 
+	 private MockMvc mockMvc;
+	 
 	 @Autowired
 	 private RobotRepository robotRepository;
 
@@ -46,6 +53,15 @@ public class RobotControllerTest {
 
 	 @Before
 	 public void setUp(){
+		 final StaticApplicationContext applicationContext = new StaticApplicationContext();	     
+		 
+		 final WebMvcConfigurationSupport webMvcConfigurationSupport = new WebMvcConfigurationSupport();
+	     webMvcConfigurationSupport.setApplicationContext(applicationContext);
+		 
+		 mockMvc = MockMvcBuilders.standaloneSetup(robotController)
+				 .setHandlerExceptionResolvers(webMvcConfigurationSupport.handlerExceptionResolver())
+				 .build();
+		 
 		 robotRepository.deleteAll();
 	 }
 
@@ -56,7 +72,7 @@ public class RobotControllerTest {
 		 robot.setY(0);
 		 robot.setOrientation(Orientation.EAST);
 
-		 this.mvc.perform(post("/robot/")
+		 this.mockMvc.perform(post("/robot/")
 				 .contentType(MediaType.APPLICATION_JSON)
 				 .accept(MediaType.APPLICATION_JSON)
 				 .content(TestUtil.convertObjectToJsonBytes(robot)))
@@ -70,7 +86,7 @@ public class RobotControllerTest {
 		 robot.setY(6);
 		 robot.setOrientation(Orientation.EAST);
 
-		 this.mvc.perform(post("/robot/")
+		 this.mockMvc.perform(post("/robot/")
 				 .contentType(MediaType.APPLICATION_JSON)
 				 .accept(MediaType.APPLICATION_JSON)
 				 .content(TestUtil.convertObjectToJsonBytes(robot)))
@@ -83,7 +99,7 @@ public class RobotControllerTest {
 		 when(robotRepository.findLastInserted()).thenReturn(null);
 		 assertEquals(null, robotRepository.findLastInserted());
 
-         this.mvc.perform(get("/robot/report")
+         this.mockMvc.perform(get("/robot/report")
                  .accept(MediaType.APPLICATION_JSON))
                  .andExpect(MockMvcResultMatchers.status().isNotFound());
 
@@ -97,7 +113,7 @@ public class RobotControllerTest {
 		 robot.setY(0);
 		 robot.setOrientation(Orientation.EAST);
 
-		 this.mvc.perform(post("/robot/")
+		 this.mockMvc.perform(post("/robot/")
 				 .contentType(MediaType.APPLICATION_JSON)
 				 .accept(MediaType.APPLICATION_JSON)
 				 .content(TestUtil.convertObjectToJsonBytes(robot)))
@@ -109,7 +125,7 @@ public class RobotControllerTest {
 
 		 String content = "{\"x\": 0,\"y\": 0,\"orientation\": \"UP\"}";
 
-		 this.mvc.perform(post("/robot/")
+		 this.mockMvc.perform(post("/robot/")
 				 .contentType(MediaType.APPLICATION_JSON)
 				 .accept(MediaType.APPLICATION_JSON)
 				 .content(content))
@@ -125,7 +141,7 @@ public class RobotControllerTest {
 		 when(robotRepository.findLastInserted()).thenReturn(null);
 		 assertEquals(null, robotRepository.findLastInserted());
 
-		 this.mvc.perform(put("/robot/position")
+		 this.mockMvc.perform(put("/robot/position")
 				 .contentType(MediaType.APPLICATION_JSON)
 				 .accept(MediaType.APPLICATION_JSON)
 				 .content(TestUtil.convertObjectToJsonBytes(m)))
@@ -147,7 +163,7 @@ public class RobotControllerTest {
 		 when(robotRepository.findLastInserted()).thenReturn(robot);
 		 assertEquals(robotRepository.findLastInserted(), robot);
 
-		 this.mvc.perform(put("/robot/position")
+		 this.mockMvc.perform(put("/robot/position")
 				 .contentType(MediaType.APPLICATION_JSON)
 				 .accept(MediaType.APPLICATION_JSON)
 				 .content(TestUtil.convertObjectToJsonBytes(m)))
@@ -172,7 +188,7 @@ public class RobotControllerTest {
 		 JSONObject expectedResponse = new JSONObject();
 		 expectedResponse.put("message", "Output: 1, 0, SOUTH");
 
-         this.mvc.perform(get("/robot/report")
+         this.mockMvc.perform(get("/robot/report")
                  .accept(MediaType.APPLICATION_JSON))
                  .andExpect(MockMvcResultMatchers.status().isOk())
                  .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(expectedResponse.get("message")));

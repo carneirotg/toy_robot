@@ -9,12 +9,12 @@
     	<constructor-arg value="com.code.boundary.robot.service.RobotService" />
   	</bean> -->
   	
-  	<bean id="robotService" class="com.code.boundary.robot.service.RobotServiceImpl" />
+<!--   	<bean id="robotService" class="com.code.boundary.robot.service.RobotServiceImpl" /> -->
   	
-  	<bean id="robotRepository" class="org.mockito.Mockito" factory-method="mock">
-    	<constructor-arg value="com.code.boundary.robot.repository.RobotRepository" />
-  	</bean>
+<!--   	<bean id="robotRepository" class="org.mockito.Mockito" factory-method="mock"> -->
+<!--     	<constructor-arg value="com.code.boundary.robot.repository.RobotRepository" /> -->
+<!--   	</bean> -->
   	
-  	<bean id="robotController" class="com.code.boundary.robot.rest.RobotController" />
+<!--   	<bean id="robotController" class="com.code.boundary.robot.rest.RobotController" /> -->
 	
 </beans>

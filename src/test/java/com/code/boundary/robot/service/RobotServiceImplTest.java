@@ -7,14 +7,17 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
+import com.code.boundary.robot.base.RobotConfig;
 import com.code.boundary.robot.entities.Action;
 import com.code.boundary.robot.entities.Orientation;
 import com.code.boundary.robot.entities.Output;
 import com.code.boundary.robot.entities.Robot;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations="classpath:toy-robot-beans-test.xml")
+//@ContextConfiguration(locations="classpath:toy-robot-beans-test.xml")
+@ContextConfiguration(loader=AnnotationConfigContextLoader.class, classes = {RobotConfig.class})
 public class RobotServiceImplTest {
 
 	@Autowired

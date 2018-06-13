@@ -72,7 +72,6 @@ public class RobotController {
 		try{
 			output = robotService.getOutput();
 		} catch(MissingRobotException ex){
-			ex.printStackTrace();
 			throw new MissingRobotException("ROBOT MISSING");
 		}
 		
